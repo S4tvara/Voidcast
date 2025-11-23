@@ -51,3 +51,17 @@ test:
 	@echo "Running web tests..."
 	@cd web && yarn test || true
 
+
+help: 
+	@echo "Usage: make <target>"
+	@echo "Targets:"
+	@echo "  build       - Build all components"
+	@echo "  build-go    - Build Go daemon"
+	@echo "  build-cli   - Build Node.js CLI"
+	@echo "  build-web   - Build Next.js web app"
+	@echo "  dev         - Start development servers"
+	@echo "  install     - Install all dependencies"
+	@echo "  clean       - Clean build artifacts"
+	@echo "  test        - Run tests"
+	@echo "  help        - Show this help message"
+	

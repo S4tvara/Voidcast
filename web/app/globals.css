@@ -1,36 +1,115 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-space-black: #000000;
+  --color-star-white: #ffffff;
+  --color-nebula-gray: #1a1a1a;
 }
 
-html,
 body {
-  max-width: 100vw;
+  background-color: var(--color-space-black);
+  color: var(--color-star-white);
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Space Background Effect */
+.bg-stars {
+  background-image: 
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+  background-size: 550px 550px, 350px 350px, 250px 250px;
+  background-position: 0 0, 40px 60px, 130px 270px;
 }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Subtle Grid */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+.animate-in {
+  animation: fadeInSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glitch Effects */
+.glitch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-wrapper::before,
+.glitch-wrapper::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-wrapper::before {
+  color: #ff00ff;
+  z-index: -1;
+}
+
+.glitch-wrapper::after {
+  color: #00ffff;
+  z-index: -2;
+}
+
+.glitch-active::before {
+  animation: glitch-anim-1 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+.glitch-active::after {
+  animation: glitch-anim-2 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+@keyframes glitch-anim-1 {
+  0% { transform: translate(0); clip-path: inset(0 0 0 0); }
+  20% { transform: translate(-2px, 2px); clip-path: inset(20% 0 40% 0); }
+  40% { transform: translate(-2px, -2px); clip-path: inset(60% 0 10% 0); }
+  60% { transform: translate(2px, 2px); clip-path: inset(10% 0 80% 0); }
+  80% { transform: translate(2px, -2px); clip-path: inset(40% 0 30% 0); }
+  100% { transform: translate(0); clip-path: inset(0 0 0 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { transform: translate(0); clip-path: inset(0 0 0 0); }
+  20% { transform: translate(2px, -2px); clip-path: inset(30% 0 20% 0); }
+  40% { transform: translate(2px, 2px); clip-path: inset(10% 0 50% 0); }
+  60% { transform: translate(-2px, -2px); clip-path: inset(50% 0 40% 0); }
+  80% { transform: translate(-2px, 2px); clip-path: inset(20% 0 60% 0); }
+  100% { transform: translate(0); clip-path: inset(0 0 0 0); }
+}

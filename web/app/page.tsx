@@ -1,32 +1,55 @@
+import Header from '@/components/Header';
+import About from '@/components/About';
+import Console from '@/components/Console';
+import Architecture from '@/components/Architecture';
+import Recipes from '@/components/Recipes';
+import Roadmap from '@/components/Roadmap';
+import Philosophy from '@/components/Philosophy';
+import Footer from '@/components/Footer';
+import GlitchText from '@/components/GlitchText';
+import Reveal from '@/components/Reveal';
+
 export default function Home() {
   return (
-    <main style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1>Voidcast</h1>
-      <p>Programmable blackhole proxy and honeypot toolkit</p>
+    <main className="min-h-screen flex flex-col">
       
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Features</h2>
-        <ul>
-          <li><strong>Sink Mode:</strong> Silently drop traffic at socket or layer-7</li>
-          <li><strong>Mirage Mode:</strong> Replay fake responses to emulate real services</li>
-          <li><strong>Drift Mode:</strong> Dynamically proxy or redirect requests</li>
-          <li><strong>Traffic Introspection:</strong> Inspect, tail, and filter traffic in real time</li>
-          <li><strong>Programmable Rules:</strong> Define matching/mutation logic via JS/Lua/DSL</li>
-          <li><strong>Deception Hooks:</strong> Trap bots, scanners, and pentesters</li>
-        </ul>
+      <Header />
+
+      {/* Hero Section */}
+      <section className="relative min-h-[80vh] flex flex-col justify-center items-center text-center px-6 pt-20">
+        <div className="animate-float">
+          <div className="relative">
+            <div className="absolute -inset-8 bg-white/5 blur-3xl rounded-full opacity-50"></div>
+            <GlitchText 
+              text="VOIDCAST" 
+              as="h1" 
+              className="text-6xl md:text-9xl font-bold tracking-tighter text-white relative z-10 mix-blend-overlay cursor-default"
+              trigger="auto"
+            />
+          </div>
+          
+          <Reveal delay={200}>
+            <p className="text-xl md:text-2xl text-gray-400 font-light mt-8 max-w-2xl mx-auto leading-relaxed">
+              Send it into the void. <br className="hidden md:block"/> 
+              <span className="text-white">Watch what screams back.</span>
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="absolute bottom-12 animate-bounce text-gray-500">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+          </svg>
+        </div>
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Use Cases</h2>
-        <ul>
-          <li>Security teams building deceptive perimeters</li>
-          <li>Developers needing traffic mirroring, mutation, or controlled failure zones</li>
-          <li>Interview demos to simulate misbehaving or unreleased APIs</li>
-          <li>Capture-the-flag (CTF) hosts setting up traps or lures</li>
-          <li>Testing networks for faulty clients, retries, edge-case handling</li>
-        </ul>
-      </section>
+      <About />
+      <Console />
+      <Recipes />
+      <Architecture />
+      <Roadmap />
+      <Philosophy />
+      <Footer />
     </main>
-  )
+  );
 }
-

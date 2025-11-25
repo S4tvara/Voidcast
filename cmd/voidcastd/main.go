@@ -22,7 +22,7 @@ func main() {
 	eng := engine.NewEngine()
 
 	// 2. Initialize and Start API
-	apiServer := api.NewAPI(eng, api.APIConfig{
+	apiServer := api.NewServer(eng, api.APIConfig{
 		Port: *apiPort,
 	})
 

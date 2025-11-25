@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/s4tvara/voidcast/internal/sink"
+	"github.com/s4tvara/voidcast/pkg/config"
 )
 
 func main() {
@@ -90,7 +91,7 @@ func main() {
 
 			s := sink.NewSinkFactory(sink.SinkConfig{
 				Port: port,
-				Logging: sink.LoggingConfig{
+				Logging: config.LoggingConfig{
 					Enabled: logging,
 				},
 			})

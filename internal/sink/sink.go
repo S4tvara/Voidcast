@@ -7,12 +7,9 @@ import (
 	"net"
 	"sync"
 	"time"
-)
 
-// TODO: add more logging configs and export it to another package
-type LoggingConfig struct {
-	Enabled bool
-}
+	"github.com/s4tvara/voidcast/pkg/config"
+)
 
 // blackhole sink mode
 type Sink struct {
@@ -21,12 +18,12 @@ type Sink struct {
 	ctx      context.Context
 	cancel   context.CancelFunc
 	wg       sync.WaitGroup
-	logging  LoggingConfig
+	logging  config.LoggingConfig
 }
 
 type SinkConfig struct {
 	Port    int
-	Logging LoggingConfig
+	Logging config.LoggingConfig
 }
 
 // Creates a new sink instance

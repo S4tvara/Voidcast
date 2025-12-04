@@ -61,6 +61,12 @@ body {
   animation: fadeInSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
 /* Glitch Effects */
 .glitch-wrapper {
   position: relative;

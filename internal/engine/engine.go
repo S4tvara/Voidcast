@@ -2,7 +2,7 @@ package engine
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"sync"
 
 	"github.com/s4tvara/voidcast/internal/sink"
@@ -44,7 +44,7 @@ func (e *Engine) Start(port int, logging config.LoggingConfig) error {
 	}
 
 	e.sinks[port] = s
-	log.Printf("Sink started on port %d with logging: %v", port, logging)
+	slog.Info("Sink started", "port", port, "logging", logging)
 	return nil
 }
 

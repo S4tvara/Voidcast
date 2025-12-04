@@ -2,11 +2,12 @@ package api
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/s4tvara/voidcast/internal/engine"
 	"github.com/s4tvara/voidcast/pkg/api/controller"
+	"github.com/s4tvara/voidcast/pkg/api/middleware"
 	"github.com/s4tvara/voidcast/pkg/api/routes"
 )
 
@@ -27,16 +28,19 @@ func NewServer(e *engine.Engine, cfg APIConfig) *Server {
 	ctrl := controller.NewController(e, cfg.Port)
 	router := routes.NewRouter(ctrl)
 
+	// Apply Middleware
+	handler := middleware.CORS(router)
+
 	return &Server{
 		config: cfg,
-		router: router,
+		router: handler,
 	}
 }
 
 // Start starts the API server
 func (s *Server) Start() error {
 	addr := fmt.Sprintf(":%d", s.config.Port)
-	log.Printf("API server listening on %s", addr)
+	slog.Info("API server listening", "address", addr)
 
 	return http.ListenAndServe(addr, s.router)
 }

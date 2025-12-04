@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
+	"log/slog"
 	"net"
 	"os"
 	"os/signal"
@@ -38,7 +38,7 @@ func main() {
 		fmt.Println("\nShutting down all sinks...")
 		for port, s := range sinks {
 			if err := s.Stop(); err != nil {
-				log.Printf("Error stopping sink on port %d: %v", port, err)
+				slog.Error("Error stopping sink", "port", port, "error", err)
 			}
 		}
 		os.Exit(0)
@@ -159,7 +159,7 @@ func main() {
 			fmt.Println("Stopping all sinks...")
 			for port, s := range sinks {
 				if err := s.Stop(); err != nil {
-					log.Printf("Error stopping sink on port %d: %v", port, err)
+					slog.Error("Error stopping sink", "port", port, "error", err)
 				}
 			}
 			fmt.Println("Goodbye!")

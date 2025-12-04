@@ -26,37 +26,16 @@ func NewController(e *engine.Engine, apiPort int) *Controller {
 	}
 }
 
-// HandleSinks acts as the main entry point for /api/sinks
-func (c *Controller) HandleSinks(w http.ResponseWriter, r *http.Request) {
-	// Enable CORS
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method == http.MethodOptions {
-		return
-	}
-
-	switch r.Method {
-	case http.MethodGet:
-		c.listSinks(w)
-	case http.MethodPost:
-		c.createSink(w, r)
-	case http.MethodDelete:
-		c.deleteSink(w, r)
-	default:
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-}
-
-func (c *Controller) listSinks(w http.ResponseWriter) {
+// ListSinks handles GET /api/sinks
+func (c *Controller) ListSinks(w http.ResponseWriter, r *http.Request) {
 	sinks := c.engine.ListSinks()
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(sinks)
 }
 
-func (c *Controller) createSink(w http.ResponseWriter, r *http.Request) {
+// CreateSink handles POST /api/sinks
+func (c *Controller) CreateSink(w http.ResponseWriter, r *http.Request) {
 	var req model.CreateSinkRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		c.respondError(w, "Invalid request body", http.StatusBadRequest)
@@ -83,7 +62,8 @@ func (c *Controller) createSink(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"status": "created"})
 }
 
-func (c *Controller) deleteSink(w http.ResponseWriter, r *http.Request) {
+// DeleteSink handles DELETE /api/sinks
+func (c *Controller) DeleteSink(w http.ResponseWriter, r *http.Request) {
 	portStr := r.URL.Query().Get("port")
 	if portStr == "" {
 		c.respondError(w, "Port parameter required", http.StatusBadRequest)

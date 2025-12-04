@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
+	"io"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,9 +15,21 @@ import (
 func main() {
 	// Parse flags
 	apiPort := flag.Int("api-port", 8080, "Port for the API server")
+	logFilePath := flag.String("log-file", "voidcast.log", "Path to the log file")
 	flag.Parse()
 
-	log.Println("Starting Voidcast daemon...")
+	// Initialize structured logging
+	logFile, err := os.OpenFile(*logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer logFile.Close()
+
+	w := io.MultiWriter(os.Stdout, logFile)
+	logger := slog.New(slog.NewJSONHandler(w, nil))
+	slog.SetDefault(logger)
+
+	slog.Info("Starting Voidcast daemon...")
 
 	// 1. Initialize Engine
 	eng := engine.NewEngine()
@@ -29,11 +42,12 @@ func main() {
 	// Start API in a goroutine
 	go func() {
 		if err := apiServer.Start(); err != nil {
-			log.Fatalf("API server failed: %v", err)
+			slog.Error("API server failed", "error", err)
+			os.Exit(1)
 		}
 	}()
 
-	log.Printf("Voidcast daemon running (API on port %d)", *apiPort)
+	slog.Info("Voidcast daemon running", "api_port", *apiPort)
 
 	// 3. Wait for interrupt signal to gracefully shutdown
 	stop := make(chan os.Signal, 1)
@@ -41,12 +55,12 @@ func main() {
 
 	<-stop
 
-	log.Println("Shutting down...")
+	slog.Info("Shutting down...")
 
 	// 4. Cleanup
 	if err := eng.Stop(); err != nil {
-		log.Printf("Error stopping engine: %v", err)
+		slog.Error("Error stopping engine", "error", err)
 	}
 
-	log.Println("Goodbye!")
+	slog.Info("Goodbye!")
 }

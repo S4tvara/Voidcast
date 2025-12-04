@@ -3,7 +3,7 @@ package sink
 import (
 	"context"
 	"fmt"
-	"log"
+	"log/slog"
 	"net"
 	"sync"
 	"time"
@@ -45,7 +45,7 @@ func (s *Sink) Start() error {
 		return fmt.Errorf("error listening on port %d: %w", s.port, err)
 	}
 	s.listener = listener
-	log.Printf("Sink on port %d listening on %s", s.port, addr)
+	slog.Info("Sink listening", "port", s.port, "address", addr)
 
 	s.wg.Add(1)
 
@@ -73,7 +73,7 @@ func (s *Sink) acceptConnections() {
 				if s.ctx.Err() != nil {
 					return // Context cancelled
 				}
-				log.Printf("Error accepting connection: %v", err)
+				slog.Error("Error accepting connection", "error", err)
 				continue
 			}
 
@@ -90,7 +90,7 @@ func (s *Sink) handleConnection(conn net.Conn) {
 	defer conn.Close()
 	if s.logging.Enabled {
 		remoteAddr := conn.RemoteAddr().String()
-		log.Printf("[SINK] Dropping connection from %s at %s", remoteAddr, time.Now().Format(time.RFC3339))
+		slog.Info("Dropping connection", "remote_addr", remoteAddr, "time", time.Now())
 	}
 
 	// Silently drop: just close the connection without reading or responding
@@ -99,7 +99,7 @@ func (s *Sink) handleConnection(conn net.Conn) {
 
 // Stop gracefully stops the sink
 func (s *Sink) Stop() error {
-	log.Printf("Stopping sink on port %d", s.port)
+	slog.Info("Stopping sink", "port", s.port)
 
 	// Cancel context to stop accepting new connections
 	s.cancel()
@@ -114,7 +114,7 @@ func (s *Sink) Stop() error {
 	// Wait for all connections to finish
 	s.wg.Wait()
 
-	log.Printf("Sink on port %d stopped", s.port)
+	slog.Info("Sink stopped", "port", s.port)
 	return nil
 }
 

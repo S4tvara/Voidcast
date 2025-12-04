@@ -10,8 +10,7 @@ import (
 func NewRouter(c *controller.Controller) http.Handler {
 	mux := http.NewServeMux()
 
-	// Register routes mapping to controller methods
-	mux.HandleFunc("/api/sinks", c.HandleSinks)
+	SinksRoutes(mux, c) // routes for sinks
 
 	return mux
 }
